@@ -8,34 +8,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* 全域基礎設定 */
+        /* 【基礎設定】 */
         body { 
             font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", sans-serif; 
-            background-color: #f0f7f6; 
+            background-color: #f0f7f6; /* 淺綠底色，看起來比較清爽 */
             margin: 0; 
             padding: 40px 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column; /* 讓內容由上而下排列 */
+            align-items: center;    /* 水平置中 */
             min-height: 100vh;
         }
 
-        /* 主容器 */
+        /* 【容器設定】限制最大寬度，避免在大螢幕上太寬 */
         .container {
             max-width: 1000px;
             width: 100%;
         }
 
-        /* 區塊一：轉接卡片樣式 */
+        /* 【區塊一：轉接卡片】 */
         .main-card {
             background: #ffffff;
-            border-radius: 15px;
+            border-radius: 15px;      /* 圓角 */
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* 輕微陰影提升質感 */
+            margin-bottom: 30px;      /* 與下方區塊的間距 */
             border: 1px solid #d1e4e2;
         }
 
+        /* 標題左側的橘色粗線 */
         .title-section {
             margin-bottom: 20px;
             border-left: 8px solid #e67e22;
@@ -44,11 +45,12 @@
 
         h1 { color: #2c3e50; margin: 0; font-size: 1.8rem; }
 
+        /* 圖片容器：設定相對定位 (relative)，讓裡面的 overlay 內容可以絕對定位 (absolute) */
         .map-container {
             position: relative;
             width: 100%;
             border-radius: 10px;
-            overflow: hidden;
+            overflow: hidden;         /* 確保圖片圓角不超出 */
             border: 2px solid #eee;
             background-color: #f8f9fa;
         }
@@ -56,38 +58,32 @@
         .screenshot {
             width: 100%;
             display: block;
-            opacity: 0.8;
+            opacity: 0.8;             /* 圖片稍微透明，讓文字更清晰 */
             transition: 0.3s;
         }
 
+        /* 浮在圖片上的白色半透明區塊 */
         .overlay-content {
             position: absolute;
-            top: 50%; left: 50%;
+            top: 50%; left: 50%;      /* 居中定位 */
             transform: translate(-50%, -50%);
             text-align: center;
             width: 85%;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.85); /* 半透明白色 */
             padding: 25px;
             border-radius: 15px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px); /* 背景模糊效果（毛玻璃） */
             border: 1px solid rgba(255,255,255,0.3);
         }
 
-        .instruction {
-            color: #2c3e50;
-            font-size: 1.1rem;
-            font-weight: bold;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
+        /* 橘色立體按鈕 */
         .btn-redirect {
             display: inline-block;
             border-radius: 50px; 
             transition: all 0.2s ease; 
             border: 2px solid #2c3e50; 
             background-color: #fff8f5; 
-            box-shadow: 0 5px 0px #e67e22;
+            box-shadow: 0 5px 0px #e67e22; /* 利用陰影做出立體底座 */
             padding: 15px 35px;
             color: #1a252f; 
             text-decoration: none; 
@@ -98,12 +94,12 @@
         }
 
         .btn-redirect:hover { 
-            top: 3px;
-            box-shadow: 0 2px 0px #e67e22;
+            top: 3px;                 /* 滑鼠移入時往下移動 3 像素 */
+            box-shadow: 0 2px 0px #e67e22; /* 縮小陰影，模擬按下效果 */
             background-color: #fff;
         }
 
-        /* 區塊二：數據表格樣式 */
+        /* 【區塊二：數據表格】 */
         .data-card {
             background: #ffffff;
             border-radius: 15px;
@@ -112,6 +108,7 @@
             border: 1px solid #d1e4e2;
         }
 
+        /* 日期提示列 */
         .date-info { 
             color: #e67e22; 
             font-weight: bold; 
@@ -119,24 +116,26 @@
             background: #fff8f5; 
             padding: 12px; 
             border-radius: 8px; 
-            display: none; 
+            display: none; /* 初期隱藏，待 JavaScript 載入資料後才顯示 */
             border: 1px solid #ffecdf;
         }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #eee; padding: 12px; text-align: left; }
         th { background-color: #fdf2e9; color: #e67e22; font-weight: 800; }
-        tr:nth-child(even) { background-color: #fafafa; }
+        tr:nth-child(even) { background-color: #fafafa; } /* 間隔顯色 */
         
+        /* 警告等級的彩色標籤 */
         .status-badge { padding: 4px 10px; border-radius: 4px; font-weight: bold; color: white; font-size: 0.9em; }
-        .status-safe { background-color: #27ae60; }
-        .status-warn { background-color: #f39c12; }
-        .status-danger { background-color: #e74c3c; }
+        .status-safe { background-color: #27ae60; }   /* 綠色 */
+        .status-warn { background-color: #f39c12; }   /* 橘色 */
+        .status-danger { background-color: #e74c3c; } /* 紅色 */
 
         #loading { text-align: center; color: #666; padding: 30px; font-weight: bold; }
 
         .footer-note { text-align: right; font-size: 0.8em; color: #95a5a6; margin-top: 15px; }
 
+        /* 手機版適應性設定 */
         @media (max-width: 768px) {
             .btn-redirect { font-size: 1rem; padding: 12px 25px; }
             h1 { font-size: 1.4rem; }
@@ -188,15 +187,22 @@
 </div>
 
 <script>
+    // 農業部 API 網址
     const apiURL = "https://data.moa.gov.tw/service/opendata/ForestFireAlert.aspx";
 
+    /**
+     * 函數：取得 YYYYMMDD 格式的日期字串，用於 API 篩選
+     */
     function getDateKey(date) {
         const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const m = String(date.getMonth() + 1).padStart(2, '0'); // 月份從 0 開始，所以要 +1
         const d = String(date.getDate()).padStart(2, '0');
         return y + m + d;
     }
 
+    /**
+     * 函數：取得 YYYY-MM-DD 格式，用於網頁文字顯示
+     */
     function formatDateDisplay(date) {
         const y = date.getFullYear();
         const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -204,62 +210,78 @@
         return y + "-" + m + "-" + d;
     }
 
+    /**
+     * 主程式：從 API 抓取資料並呈現
+     */
     async function fetchFireData() {
         try {
+            // 向 API 發送請求並等待回應
             const response = await fetch(apiURL);
-            const data = await response.json();
+            const data = await response.json(); // 將回傳內容轉為 JSON 格式 (陣列)
             
             const tableBody = document.getElementById('table-body');
             const loading = document.getElementById('loading');
             const table = document.getElementById('fire-table');
             const dateDisplay = document.getElementById('date-display');
 
+            // 準備今日與昨日的日期 Key
             const now = new Date();
             const todayKey = getDateKey(now);
             const yesterday = new Date();
             yesterday.setDate(now.getDate() - 1);
             const yesterdayKey = getDateKey(yesterday);
 
-            // 優先找今日，若無則找昨日
+            // 1. 篩選邏輯：先用 filter 找出 CreateDate 是今天開頭的資料
             let targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(todayKey));
             let infoText = "目前顯示：今日 (" + formatDateDisplay(now) + ") 之即時資訊";
 
+            // 2. 如果今天沒資料，則改抓昨日的資料
             if (targetData.length === 0) {
                 targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(yesterdayKey));
                 infoText = "提示：今日尚未更新，顯示昨日 (" + formatDateDisplay(yesterday) + ") 之資訊";
             }
 
+            // 如果篩選後的資料不為空，開始渲染表格
             if (targetData.length > 0) {
-                loading.style.display = 'none';
-                table.style.display = 'table';
-                dateDisplay.style.display = 'block';
+                loading.style.display = 'none'; // 隱藏載入中文字
+                table.style.display = 'table'; // 顯示表格
+                dateDisplay.style.display = 'block'; // 顯示日期提示
                 dateDisplay.innerHTML = '<i class="fas fa-calendar-alt"></i> ' + infoText;
 
+                // 遍歷每一筆資料並建立表格列 (tr)
                 targetData.forEach(item => {
                     const row = document.createElement('tr');
+                    
+                    // 根據警告等級內容設定標籤類別
                     const warnText = item.warn_level_chinese || "安全";
                     let badgeClass = 'status-safe';
                     if(warnText !== '安全') {
+                        // 如果包含「注意」就用橘色，否則(危險)用紅色
                         badgeClass = warnText.includes('注意') ? 'status-warn' : 'status-danger';
                     }
+
+                    // 轉換日期字串：20241007000000 -> 2024-10-07
                     const d = item.CreateDate;
                     const formattedDate = d.substring(0,4) + "-" + d.substring(4,6) + "-" + d.substring(6,8);
 
+                    // 填入該列的 HTML
                     row.innerHTML = `
                         <td>${item.name}</td>
                         <td><span class="status-badge ${badgeClass}">${warnText}</span></td>
                         <td>${formattedDate}</td>
                     `;
-                    tableBody.appendChild(row);
+                    tableBody.appendChild(row); // 將列加入表格
                 });
             } else {
                 loading.innerHTML = "目前尚無近兩日之資料更新。";
             }
         } catch (error) {
+            // 如果網路斷線或 API 出錯會執行這裡
             document.getElementById('loading').innerHTML = "資料載入失敗，請稍後再試。";
         }
     }
 
+    // 啟動主程式
     fetchFireData();
 </script>
 

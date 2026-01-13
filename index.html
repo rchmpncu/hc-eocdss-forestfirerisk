@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>林火風險評估資訊系統</title>
+    <title>林火風險評估系統</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* 【基礎設定】 */
-        html { scroll-behavior: smooth; } /* 讓頁面滾動時呈現平滑效果，而不是瞬間跳轉 */
-        
+        /* 【平滑滾動設定】讓點擊選單後的跳轉有滑動感 */
+        html { scroll-behavior: smooth; }
+
         body { 
             font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", sans-serif; 
             background-color: #f0f7f6; 
@@ -22,55 +22,62 @@
             min-height: 100vh;
         }
 
-        /* 【左上角簡易選單】 */
+        /* 【主容器】 */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            position: relative; /* 讓內部的選單可以相對於此容器定位 */
+        }
+
+        /* 【左側緊鄰浮動選單】 */
         .side-menu {
-            position: fixed;   /* 固定位置，不隨網頁滾動消失 */
-            top: 20px;
-            left: 20px;
-            z-index: 1000;     /* 確保選單在最上層 */
-            background: white;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 1px solid #e67e22;
+            position: absolute;   /* 絕對定位 */
+            left: -120px;         /* 關鍵：向左移動偏移量，讓它出現在容器左側外 */
+            top: 0;
+            width: 100px;
+            z-index: 1000;
+            
+            /* 讓選單隨網頁滾動固定的技巧 */
+            position: sticky;     
+            top: 40px;            /* 滾動到距離視窗頂部 40px 時固定住 */
             display: flex;
             flex-direction: column;
-            gap: 10px;         /* 選項之間的間距 */
+            gap: 10px;
         }
 
         .menu-item {
             text-decoration: none;
             color: #2c3e50;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 12px 8px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #e67e22;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: 0.3s;
+            text-align: center;
             display: flex;
+            flex-direction: column; /* 圖示在上，文字在下 */
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
 
         .menu-item:hover {
             background-color: #fff8f5;
             color: #e67e22;
+            transform: scale(1.05); /* 稍微放大效果 */
         }
 
-        /* 【內容容器】 */
-        .container {
-            max-width: 1000px;
-            width: 100%;
-        }
-
-        /* 區塊共同卡片樣式 */
+        /* 【區塊共同卡片樣式】 */
         .card {
             background: #ffffff;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            margin-bottom: 50px; /* 增加間距讓切換更有感 */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
             border: 1px solid #d1e4e2;
-            scroll-margin-top: 30px; /* 點擊選單跳轉後，上方預留一點空間 */
+            scroll-margin-top: 40px; /* 修正點擊跳轉後，上方不被遮擋 */
         }
 
         .title-section {
@@ -81,25 +88,26 @@
 
         h1 { color: #2c3e50; margin: 0; font-size: 1.8rem; }
 
-        /* 區塊一專屬樣式 (圖片與按鈕) */
+        /* 【圖片區塊樣式】 */
         .map-container {
             position: relative;
             width: 100%;
             border-radius: 10px;
             overflow: hidden;
             border: 2px solid #eee;
+            background-color: #000;
         }
 
-        .screenshot { width: 100%; display: block; opacity: 0.8; }
+        .screenshot { width: 100%; display: block; opacity: 0.85; }
 
         .overlay-content {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            width: 85%;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 25px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
             border-radius: 15px;
             backdrop-filter: blur(5px);
         }
@@ -110,10 +118,11 @@
             border: 2px solid #2c3e50; 
             background-color: #fff8f5; 
             box-shadow: 0 5px 0px #e67e22;
-            padding: 15px 35px;
+            padding: 18px 45px;
             color: #1a252f; 
             text-decoration: none; 
             font-weight: 800; 
+            font-size: 1.3rem;
             position: relative;
             top: 0;
             transition: 0.2s;
@@ -121,67 +130,81 @@
 
         .btn-redirect:hover { top: 3px; box-shadow: 0 2px 0px #e67e22; }
 
-        /* 區塊二專屬樣式 (表格) */
-        .date-info { color: #e67e22; font-weight: bold; margin-bottom: 15px; background: #fff8f5; padding: 12px; border-radius: 8px; display: none; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #eee; padding: 12px; text-align: left; }
-        th { background-color: #fdf2e9; color: #e67e22; }
-        .status-badge { padding: 4px 10px; border-radius: 4px; font-weight: bold; color: white; }
+        /* 【表格樣式】 */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #e67e22; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; color: white; }
         .status-safe { background-color: #27ae60; }
         .status-warn { background-color: #f39c12; }
         .status-danger { background-color: #e74c3c; }
 
-        #loading { text-align: center; padding: 30px; }
+        .date-info { color: #e67e22; font-weight: bold; margin-bottom: 15px; background: #fff8f5; padding: 10px; border-radius: 5px; display: none; }
         .footer-note { text-align: right; font-size: 0.8em; color: #95a5a6; margin-top: 15px; }
 
-        @media (max-width: 768px) {
-            .side-menu { top: auto; bottom: 20px; left: 50%; transform: translateX(-50%); flex-direction: row; } /* 手機版改為下方橫向選單 */
+        /* 【手機版優化】選單改到畫面下方橫向排列 */
+        @media (max-width: 1200px) {
+            .side-menu {
+                position: fixed;
+                left: 50%; bottom: 20px; top: auto;
+                transform: translateX(-50%);
+                flex-direction: row;
+                width: auto;
+                background: rgba(255,255,255,0.9);
+                padding: 10px 20px;
+                border-radius: 50px;
+            }
+            .menu-item { flex-direction: row; font-size: 0.9rem; padding: 8px 15px; }
         }
     </style>
 </head>
 <body>
 
-<nav class="side-menu">
-    <a href="#section-official" class="menu-item">
-        <i class="fas fa-external-link-alt"></i> 林火風險預警系統
-    </a>
-    <a href="#section-data" class="menu-item">
-        <i class="fas fa-table"></i> 林火風險評估資訊
-    </a>
-</nav>
-
 <div class="container">
-    <div id="section-official" class="card">
+    <nav class="side-menu">
+        <a href="#section-map" class="menu-item">
+            <i class="fas fa-map"></i> 官方系統
+        </a>
+        <a href="#section-list" class="menu-item">
+            <i class="fas fa-list-ul"></i> 風險資訊
+        </a>
+    </nav>
+
+    <div id="section-map" class="card">
         <div class="title-section">
             <h1>林火風險預警系統</h1>
         </div>
         <div class="map-container">
             <img src="fire-map.png" alt="林火系統截圖" class="screenshot">
             <div class="overlay-content">
-                <div class="instruction" style="margin-bottom:20px; font-weight:bold; color:#2c3e50;">
-                    因安全防護機制限制嵌入，<br>
-                    請點擊下方按鈕進入官方完整系統。
+                <div class="instruction">
+                    <i class="fas fa-shield-alt" style="color: #e67e22;"></i><br>
+                    因網站安全防護機制限制嵌入，<br>
+                    請點擊下方按鈕，直接前往官方系統。
                 </div>
                 <a href="https://ffwi.forest.gov.tw/" target="_blank" class="btn-redirect">
-                    進入官方系統 <i class="fas fa-map-marked-alt"></i>
+                    進入官方系統 <i class="fas fa-external-link-alt"></i>
                 </a>
             </div>
         </div>
+        <div class="footer-note">資料來源：農業部林業及自然保育署</div>
     </div>
 
-    <div id="section-data" class="card">
+    <div id="section-list" class="card">
         <div class="title-section">
             <h1>林火風險評估資訊</h1>
         </div>
         <div id="date-display" class="date-info"></div>
-        <div id="loading"><i class="fas fa-spinner fa-spin"></i> 即時數據讀取中...</div>
+        <div id="loading" style="text-align:center; padding:20px;">資料載入中...</div>
         
         <table id="fire-table" style="display:none;">
             <thead>
                 <tr>
-                    <th>觀測站/園區名稱</th>
+                    <th>測站/國家森林遊樂區名稱</th>
                     <th>林火指數等級</th>
-                    <th>資料日期</th>
+                    <th>更新日期</th>
                 </tr>
             </thead>
             <tbody id="table-body"></tbody>
@@ -191,7 +214,7 @@
 </div>
 
 <script>
-    /* JavaScript 邏輯與之前相同，負責抓取 API 與篩選日期 */
+    // API 串接邏輯
     const apiURL = "https://data.moa.gov.tw/service/opendata/ForestFireAlert.aspx";
 
     function getDateKey(date) {
@@ -199,13 +222,6 @@
         const m = String(date.getMonth() + 1).padStart(2, '0');
         const d = String(date.getDate()).padStart(2, '0');
         return y + m + d;
-    }
-
-    function formatDateDisplay(date) {
-        const y = date.getFullYear();
-        const m = String(date.getMonth() + 1).padStart(2, '0');
-        const d = String(date.getDate()).padStart(2, '0');
-        return y + "-" + m + "-" + d;
     }
 
     async function fetchFireData() {
@@ -225,18 +241,18 @@
             const yesterdayKey = getDateKey(yesterday);
 
             let targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(todayKey));
-            let infoText = "目前顯示：今日 (" + formatDateDisplay(now) + ") 之即時資訊";
+            let infoText = "目前顯示：今日之即時預警資訊";
 
             if (targetData.length === 0) {
                 targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(yesterdayKey));
-                infoText = "提示：顯示昨日 (" + formatDateDisplay(yesterday) + ") 之資訊";
+                infoText = "提示：今日尚未更新，目前顯示昨日之預警資訊";
             }
 
             if (targetData.length > 0) {
                 loading.style.display = 'none';
                 table.style.display = 'table';
                 dateDisplay.style.display = 'block';
-                dateDisplay.innerHTML = '<i class="fas fa-calendar-alt"></i> ' + infoText;
+                dateDisplay.innerHTML = "⚠️ " + infoText;
 
                 targetData.forEach(item => {
                     const row = document.createElement('tr');
@@ -245,17 +261,17 @@
                     if(warnText !== '安全') {
                         badgeClass = warnText.includes('注意') ? 'status-warn' : 'status-danger';
                     }
-                    const d = item.CreateDate;
-                    const formattedDate = d.substring(0,4) + "-" + d.substring(4,6) + "-" + d.substring(6,8);
+                    const rawDate = item.CreateDate;
+                    const formattedDate = rawDate.substring(0,4) + "-" + rawDate.substring(4,6) + "-" + rawDate.substring(6,8);
 
                     row.innerHTML = `<td>${item.name}</td><td><span class="status-badge ${badgeClass}">${warnText}</span></td><td>${formattedDate}</td>`;
                     tableBody.appendChild(row);
                 });
             } else {
-                loading.innerHTML = "目前尚無近兩日之資料更新。";
+                loading.innerHTML = "目前尚無資料更新。";
             }
         } catch (error) {
-            document.getElementById('loading').innerHTML = "資料載入失敗。";
+            document.getElementById('loading').innerHTML = "載入失敗。";
         }
     }
 

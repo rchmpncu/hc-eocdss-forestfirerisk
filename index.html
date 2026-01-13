@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>林火風險評估系統 - 轉接頁面</title>
+    <title>林火風險評估資訊系統</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -13,144 +13,255 @@
             font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", sans-serif; 
             background-color: #f0f7f6; 
             margin: 0; 
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        /* 主卡片容器 */
+        /* 主容器 */
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* 區塊一：轉接卡片樣式 */
         .main-card {
             background: #ffffff;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            max-width: 1100px;
-            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
             border: 1px solid #d1e4e2;
         }
 
-        /* 標題區 */
         .title-section {
             margin-bottom: 20px;
-            border-left: 8px solid #e67e22; /* 橘色主題色 */
+            border-left: 8px solid #e67e22;
             padding-left: 15px;
         }
 
-        h1 { 
-            color: #2c3e50; 
-            margin: 0; 
-            font-size: 1.8rem; 
-        }
+        h1 { color: #2c3e50; margin: 0; font-size: 1.8rem; }
 
-        /* 圖片展示區：這裡使用了相對定位，方便讓按鈕浮在圖上 */
         .map-container {
             position: relative;
             width: 100%;
             border-radius: 10px;
             overflow: hidden;
             border: 2px solid #eee;
-            background-color: #000; /* 預載色 */
+            background-color: #f8f9fa;
         }
 
-        /* 您的截圖圖片 */
         .screenshot {
             width: 100%;
             display: block;
-            opacity: 0.85; /* 稍微調暗，讓前景文字與按鈕更突出 */
+            opacity: 0.8;
             transition: 0.3s;
         }
 
-        /* 覆蓋在圖片上的說明區塊 */
         .overlay-content {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* 精確居中 */
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
-            padding: 30px;
+            width: 85%;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px;
             border-radius: 15px;
-            backdrop-filter: blur(5px); /* 毛玻璃效果，更有質感 */
+            backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.3);
         }
 
         .instruction {
             color: #2c3e50;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             line-height: 1.6;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* 您招牌的立體膠囊按鈕（修改為橘色系） */
         .btn-redirect {
             display: inline-block;
             border-radius: 50px; 
             transition: all 0.2s ease; 
             border: 2px solid #2c3e50; 
             background-color: #fff8f5; 
-            box-shadow: 0 5px 0px #e67e22; /* 橘色立體底座 */
-            padding: 18px 45px;
+            box-shadow: 0 5px 0px #e67e22;
+            padding: 15px 35px;
             color: #1a252f; 
             text-decoration: none; 
             font-weight: 800; 
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             position: relative;
             top: 0;
         }
 
         .btn-redirect:hover { 
-            top: 3px;                  /* 按下效果 */
+            top: 3px;
             box-shadow: 0 2px 0px #e67e22;
             background-color: #fff;
         }
 
-        .footer-note {
-            text-align: right;
-            font-size: 0.8em;
-            color: #95a5a6;
-            margin-top: 15px;
+        /* 區塊二：數據表格樣式 */
+        .data-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #d1e4e2;
         }
 
-        /* 手機版優化 */
+        .date-info { 
+            color: #e67e22; 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+            background: #fff8f5; 
+            padding: 12px; 
+            border-radius: 8px; 
+            display: none; 
+            border: 1px solid #ffecdf;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #eee; padding: 12px; text-align: left; }
+        th { background-color: #fdf2e9; color: #e67e22; font-weight: 800; }
+        tr:nth-child(even) { background-color: #fafafa; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 4px; font-weight: bold; color: white; font-size: 0.9em; }
+        .status-safe { background-color: #27ae60; }
+        .status-warn { background-color: #f39c12; }
+        .status-danger { background-color: #e74c3c; }
+
+        #loading { text-align: center; color: #666; padding: 30px; font-weight: bold; }
+
+        .footer-note { text-align: right; font-size: 0.8em; color: #95a5a6; margin-top: 15px; }
+
         @media (max-width: 768px) {
-            .overlay-content { padding: 20px; }
-            .instruction { font-size: 1rem; }
-            .btn-redirect { padding: 12px 30px; font-size: 1.1rem; }
+            .btn-redirect { font-size: 1rem; padding: 12px 25px; }
             h1 { font-size: 1.4rem; }
+            th, td { padding: 8px; font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="main-card">
-    <div class="title-section">
-        <h1>林火風險預警系統</h1>
-    </div>
-
-    <div class="map-container">
-        <img src="fire-map.png" alt="林火系統截圖" class="screenshot">
-        
-        <div class="overlay-content">
-            <div class="instruction">
-                <i class="fas fa-shield-alt" style="color: #e67e22;"></i><br>
-                因網站安全防護機制限制嵌入，<br>
-                請點擊下方按鈕，直接前往官方系統。
+<div class="container">
+    <div class="main-card">
+        <div class="title-section">
+            <h1>林火風險預警系統</h1>
+        </div>
+        <div class="map-container">
+            <img src="fire-map.png" alt="林火系統截圖" class="screenshot">
+            <div class="overlay-content">
+                <div class="instruction">
+                    <i class="fas fa-shield-alt" style="color: #e67e22; font-size: 1.5rem;"></i><br>
+                    因安全防護機制限制嵌入，<br>
+                    請點擊下方按鈕進入官方完整系統。
+                </div>
+                <a href="https://ffwi.forest.gov.tw/" target="_blank" class="btn-redirect">
+                    進入官方系統 <i class="fas fa-external-link-alt"></i>
+                </a>
             </div>
-            
-            <a href="https://ffwi.forest.gov.tw/" target="_blank" class="btn-redirect">
-                進入官方系統 <i class="fas fa-external-link-alt"></i>
-            </a>
         </div>
     </div>
 
-    <div class="footer-note">
-        資料來源：農業部林業及自然保育署
+    <div class="data-card">
+        <div class="title-section">
+            <h1>林火風險評估資訊</h1>
+        </div>
+        <div id="date-display" class="date-info"></div>
+        <div id="loading"><i class="fas fa-spinner fa-spin"></i> 即時數據讀取中...</div>
+        
+        <table id="fire-table" style="display:none;">
+            <thead>
+                <tr>
+                    <th>觀測站/園區名稱</th>
+                    <th>林火指數等級</th>
+                    <th>資料日期</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <div class="footer-note">資料來源：農業部林業及自然保育署</div>
     </div>
 </div>
+
+<script>
+    const apiURL = "https://data.moa.gov.tw/service/opendata/ForestFireAlert.aspx";
+
+    function getDateKey(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return y + m + d;
+    }
+
+    function formatDateDisplay(date) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return y + "-" + m + "-" + d;
+    }
+
+    async function fetchFireData() {
+        try {
+            const response = await fetch(apiURL);
+            const data = await response.json();
+            
+            const tableBody = document.getElementById('table-body');
+            const loading = document.getElementById('loading');
+            const table = document.getElementById('fire-table');
+            const dateDisplay = document.getElementById('date-display');
+
+            const now = new Date();
+            const todayKey = getDateKey(now);
+            const yesterday = new Date();
+            yesterday.setDate(now.getDate() - 1);
+            const yesterdayKey = getDateKey(yesterday);
+
+            // 優先找今日，若無則找昨日
+            let targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(todayKey));
+            let infoText = "目前顯示：今日 (" + formatDateDisplay(now) + ") 之即時資訊";
+
+            if (targetData.length === 0) {
+                targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(yesterdayKey));
+                infoText = "提示：今日尚未更新，顯示昨日 (" + formatDateDisplay(yesterday) + ") 之資訊";
+            }
+
+            if (targetData.length > 0) {
+                loading.style.display = 'none';
+                table.style.display = 'table';
+                dateDisplay.style.display = 'block';
+                dateDisplay.innerHTML = '<i class="fas fa-calendar-alt"></i> ' + infoText;
+
+                targetData.forEach(item => {
+                    const row = document.createElement('tr');
+                    const warnText = item.warn_level_chinese || "安全";
+                    let badgeClass = 'status-safe';
+                    if(warnText !== '安全') {
+                        badgeClass = warnText.includes('注意') ? 'status-warn' : 'status-danger';
+                    }
+                    const d = item.CreateDate;
+                    const formattedDate = d.substring(0,4) + "-" + d.substring(4,6) + "-" + d.substring(6,8);
+
+                    row.innerHTML = `
+                        <td>${item.name}</td>
+                        <td><span class="status-badge ${badgeClass}">${warnText}</span></td>
+                        <td>${formattedDate}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                loading.innerHTML = "目前尚無近兩日之資料更新。";
+            }
+        } catch (error) {
+            document.getElementById('loading').innerHTML = "資料載入失敗，請稍後再試。";
+        }
+    }
+
+    fetchFireData();
+</script>
 
 </body>
 </html>

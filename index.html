@@ -143,10 +143,10 @@
 
 <nav class="side-menu">
     <a href="#section-official" class="menu-item">
-        <i class="fas fa-external-link-alt"></i> 官方系統
+        <i class="fas fa-external-link-alt"></i> 林火風險預警系統
     </a>
     <a href="#section-data" class="menu-item">
-        <i class="fas fa-table"></i> 即時數據
+        <i class="fas fa-table"></i> 林火風險評估資訊
     </a>
 </nav>
 
@@ -229,7 +229,7 @@
 
             if (targetData.length === 0) {
                 targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(yesterdayKey));
-                infoText = "提示：今日尚未更新，顯示昨日 (" + formatDateDisplay(yesterday) + ") 之資訊";
+                infoText = "提示：顯示昨日 (" + formatDateDisplay(yesterday) + ") 之資訊";
             }
 
             if (targetData.length > 0) {

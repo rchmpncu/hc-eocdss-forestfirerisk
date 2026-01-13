@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* 【平滑滾動設定】讓點擊選單後的跳轉有滑動感 */
         html { scroll-behavior: smooth; }
 
         body { 
@@ -26,20 +25,20 @@
         .container {
             max-width: 1000px;
             width: 100%;
-            position: relative; /* 讓內部的選單可以相對於此容器定位 */
+            position: relative; /* 作為右側選單定位的基準 */
         }
 
-        /* 【左側緊鄰浮動選單】 */
+        /* 【右側緊鄰浮動選單】 */
         .side-menu {
-            position: absolute;   /* 絕對定位 */
-            left: -120px;         /* 關鍵：向左移動偏移量，讓它出現在容器左側外 */
+            position: absolute;   
+            right: -120px;        /* 關鍵修改：改為 right 並使用負值，讓它掛在容器右側外 */
             top: 0;
             width: 100px;
             z-index: 1000;
             
-            /* 讓選單隨網頁滾動固定的技巧 */
+            /* 黏性定位：滾動時固定在畫面右方 */
             position: sticky;     
-            top: 40px;            /* 滾動到距離視窗頂部 40px 時固定住 */
+            top: 40px;            
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -53,12 +52,12 @@
             padding: 12px 8px;
             background: white;
             border-radius: 10px;
-            border: 1px solid #e67e22;
+            border: 1px solid #e67e22; /* 橘色邊框 */
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: 0.3s;
             text-align: center;
             display: flex;
-            flex-direction: column; /* 圖示在上，文字在下 */
+            flex-direction: column; 
             align-items: center;
             gap: 5px;
         }
@@ -66,10 +65,10 @@
         .menu-item:hover {
             background-color: #fff8f5;
             color: #e67e22;
-            transform: scale(1.05); /* 稍微放大效果 */
+            transform: scale(1.05);
         }
 
-        /* 【區塊共同卡片樣式】 */
+        /* 【區塊卡片樣式】 */
         .card {
             background: #ffffff;
             border-radius: 15px;
@@ -77,25 +76,24 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             margin-bottom: 40px;
             border: 1px solid #d1e4e2;
-            scroll-margin-top: 40px; /* 修正點擊跳轉後，上方不被遮擋 */
+            scroll-margin-top: 40px; 
         }
 
         .title-section {
             margin-bottom: 20px;
-            border-left: 8px solid #e67e22;
+            border-left: 8px solid #e67e22; /* 標題左側橘線 */
             padding-left: 15px;
         }
 
         h1 { color: #2c3e50; margin: 0; font-size: 1.8rem; }
 
-        /* 【圖片區塊樣式】 */
+        /* 【地圖區塊】 */
         .map-container {
             position: relative;
             width: 100%;
             border-radius: 10px;
             overflow: hidden;
             border: 2px solid #eee;
-            background-color: #000;
         }
 
         .screenshot { width: 100%; display: block; opacity: 0.85; }
@@ -112,6 +110,7 @@
             backdrop-filter: blur(5px);
         }
 
+        /* 【按鈕樣式】 */
         .btn-redirect {
             display: inline-block;
             border-radius: 50px; 
@@ -130,7 +129,7 @@
 
         .btn-redirect:hover { top: 3px; box-shadow: 0 2px 0px #e67e22; }
 
-        /* 【表格樣式】 */
+        /* 【數據表格樣式】 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         th { background-color: #e67e22; color: white; }
@@ -144,17 +143,18 @@
         .date-info { color: #e67e22; font-weight: bold; margin-bottom: 15px; background: #fff8f5; padding: 10px; border-radius: 5px; display: none; }
         .footer-note { text-align: right; font-size: 0.8em; color: #95a5a6; margin-top: 15px; }
 
-        /* 【手機版優化】選單改到畫面下方橫向排列 */
-        @media (max-width: 1200px) {
+        /* 【手機版優化】選單改到下方橫向排列 */
+        @media (max-width: 1240px) {
             .side-menu {
                 position: fixed;
-                left: 50%; bottom: 20px; top: auto;
+                left: 50%; bottom: 20px; right: auto; top: auto;
                 transform: translateX(-50%);
                 flex-direction: row;
                 width: auto;
-                background: rgba(255,255,255,0.9);
+                background: rgba(255,255,255,0.95);
                 padding: 10px 20px;
                 border-radius: 50px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             }
             .menu-item { flex-direction: row; font-size: 0.9rem; padding: 8px 15px; }
         }
@@ -165,10 +165,10 @@
 <div class="container">
     <nav class="side-menu">
         <a href="#section-map" class="menu-item">
-            <i class="fas fa-map"></i> 官方系統
+            <i class="fas fa-map"></i> 官方地圖
         </a>
         <a href="#section-list" class="menu-item">
-            <i class="fas fa-list-ul"></i> 風險資訊
+            <i class="fas fa-list-ul"></i> 數據清單
         </a>
     </nav>
 
@@ -189,7 +189,7 @@
                 </a>
             </div>
         </div>
-        <div class="footer-note">資料來源：農業部林業及自然保育署</div>
+        <div class="footer-note">資料來源：農業部林業及自然保育署 [cite: 19, 20]</div>
     </div>
 
     <div id="section-list" class="card">
@@ -209,12 +209,12 @@
             </thead>
             <tbody id="table-body"></tbody>
         </table>
-        <div class="footer-note">資料來源：農業部林業及自然保育署</div>
+        <div class="footer-note">資料來源：農業部林業及自然保育署 [cite: 19, 20]</div>
     </div>
 </div>
 
 <script>
-    // API 串接邏輯
+    // 根據 API 文件介接資料 [cite: 3, 39]
     const apiURL = "https://data.moa.gov.tw/service/opendata/ForestFireAlert.aspx";
 
     function getDateKey(date) {
@@ -240,6 +240,7 @@
             yesterday.setDate(now.getDate() - 1);
             const yesterdayKey = getDateKey(yesterday);
 
+            // 根據 CreateDate 欄位篩選最新資料 
             let targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(todayKey));
             let infoText = "目前顯示：今日之即時預警資訊";
 
@@ -256,6 +257,7 @@
 
                 targetData.forEach(item => {
                     const row = document.createElement('tr');
+                    // 使用 API 定義的欄位名稱：name, warn_level_chinese, CreateDate 
                     const warnText = item.warn_level_chinese || "安全";
                     let badgeClass = 'status-safe';
                     if(warnText !== '安全') {

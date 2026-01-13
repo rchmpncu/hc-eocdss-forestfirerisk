@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>林火風險評估系統</title>
+    <title>林火風險評估資訊系統</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* 【平滑滾動】點擊選單時頁面會緩慢滑動 */
         html { scroll-behavior: smooth; }
-
+        
         body { 
             font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", sans-serif; 
             background-color: #f0f7f6; 
@@ -21,22 +22,23 @@
             min-height: 100vh;
         }
 
-        /* 【主容器】 */
+        /* 【主容器】設定 relative 讓選單能以這張卡片的寬度為基準來定位 */
         .container {
             max-width: 1000px;
             width: 100%;
-            position: relative; /* 作為右側選單定位的基準 */
+            position: relative; 
         }
 
-        /* 【右側緊鄰浮動選單】 */
+        /* 【右側緊鄰選單】 */
         .side-menu {
+            /* 1. 先用 absolute 定位在 container 的右側邊界外 */
             position: absolute;   
-            right: -120px;        /* 關鍵修改：改為 right 並使用負值，讓它掛在容器右側外 */
+            right: -110px;        /* 往右偏移，剛好躲在白色區域外 */
             top: 0;
-            width: 100px;
+            width: 90px;
             z-index: 1000;
             
-            /* 黏性定位：滾動時固定在畫面右方 */
+            /* 2. 再用 sticky 讓選單滾動到上方時會「黏住」 */
             position: sticky;     
             top: 40px;            
             display: flex;
@@ -52,12 +54,12 @@
             padding: 12px 8px;
             background: white;
             border-radius: 10px;
-            border: 1px solid #e67e22; /* 橘色邊框 */
+            border: 1px solid #e67e22;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: 0.3s;
             text-align: center;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             align-items: center;
             gap: 5px;
         }
@@ -65,29 +67,29 @@
         .menu-item:hover {
             background-color: #fff8f5;
             color: #e67e22;
-            transform: scale(1.05);
+            transform: translateX(5px); /* 移入時往右微動 */
         }
 
-        /* 【區塊卡片樣式】 */
+        /* 【卡片設計】 */
         .card {
             background: #ffffff;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             margin-bottom: 40px;
             border: 1px solid #d1e4e2;
-            scroll-margin-top: 40px; 
+            scroll-margin-top: 40px; /* 防止跳轉時標題被頂部遮住 */
         }
 
         .title-section {
             margin-bottom: 20px;
-            border-left: 8px solid #e67e22; /* 標題左側橘線 */
+            border-left: 8px solid #e67e22;
             padding-left: 15px;
         }
 
         h1 { color: #2c3e50; margin: 0; font-size: 1.8rem; }
 
-        /* 【地圖區塊】 */
+        /* 【區塊一：地圖容器】 */
         .map-container {
             position: relative;
             width: 100%;
@@ -103,25 +105,24 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            width: 90%;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 30px;
+            width: 85%;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 25px;
             border-radius: 15px;
             backdrop-filter: blur(5px);
         }
 
-        /* 【按鈕樣式】 */
         .btn-redirect {
             display: inline-block;
             border-radius: 50px; 
             border: 2px solid #2c3e50; 
             background-color: #fff8f5; 
             box-shadow: 0 5px 0px #e67e22;
-            padding: 18px 45px;
+            padding: 15px 35px;
             color: #1a252f; 
             text-decoration: none; 
             font-weight: 800; 
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             position: relative;
             top: 0;
             transition: 0.2s;
@@ -129,32 +130,31 @@
 
         .btn-redirect:hover { top: 3px; box-shadow: 0 2px 0px #e67e22; }
 
-        /* 【數據表格樣式】 */
+        /* 【區塊二：數據表格】 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         th { background-color: #e67e22; color: white; }
         tr:nth-child(even) { background-color: #f9f9f9; }
-        
         .status-badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; color: white; }
         .status-safe { background-color: #27ae60; }
         .status-warn { background-color: #f39c12; }
         .status-danger { background-color: #e74c3c; }
 
-        .date-info { color: #e67e22; font-weight: bold; margin-bottom: 15px; background: #fff8f5; padding: 10px; border-radius: 5px; display: none; }
+        .date-info { color: #e67e22; font-weight: bold; margin-bottom: 15px; background: #fff8f5; padding: 10px; border-radius: 8px; display: none; }
         .footer-note { text-align: right; font-size: 0.8em; color: #95a5a6; margin-top: 15px; }
 
-        /* 【手機版優化】選單改到下方橫向排列 */
-        @media (max-width: 1240px) {
+        /* 【自動切換手機版】當螢幕太窄，選單自動移到下方，避免擋住內容 */
+        @media (max-width: 1220px) {
             .side-menu {
                 position: fixed;
                 left: 50%; bottom: 20px; right: auto; top: auto;
                 transform: translateX(-50%);
                 flex-direction: row;
                 width: auto;
-                background: rgba(255,255,255,0.95);
-                padding: 10px 20px;
+                background: white;
+                padding: 10px;
                 border-radius: 50px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             }
             .menu-item { flex-direction: row; font-size: 0.9rem; padding: 8px 15px; }
         }
@@ -165,7 +165,7 @@
 <div class="container">
     <nav class="side-menu">
         <a href="#section-map" class="menu-item">
-            <i class="fas fa-map"></i> 官方地圖
+            <i class="fas fa-map"></i> 官方系統
         </a>
         <a href="#section-list" class="menu-item">
             <i class="fas fa-list-ul"></i> 數據清單
@@ -179,17 +179,16 @@
         <div class="map-container">
             <img src="fire-map.png" alt="林火系統截圖" class="screenshot">
             <div class="overlay-content">
-                <div class="instruction">
-                    <i class="fas fa-shield-alt" style="color: #e67e22;"></i><br>
-                    因網站安全防護機制限制嵌入，<br>
-                    請點擊下方按鈕，直接前往官方系統。
+                <div class="instruction" style="margin-bottom:20px; font-weight:bold; color:#2c3e50;">
+                    因安全防護機制限制嵌入，<br>
+                    請點擊下方按鈕直接進入官方系統。
                 </div>
                 <a href="https://ffwi.forest.gov.tw/" target="_blank" class="btn-redirect">
                     進入官方系統 <i class="fas fa-external-link-alt"></i>
                 </a>
             </div>
         </div>
-        <div class="footer-note">資料來源：農業部林業及自然保育署 [cite: 19, 20]</div>
+        <div class="footer-note">資料來源：農業部林業及自然保育署</div>
     </div>
 
     <div id="section-list" class="card">
@@ -197,24 +196,24 @@
             <h1>林火風險評估資訊</h1>
         </div>
         <div id="date-display" class="date-info"></div>
-        <div id="loading" style="text-align:center; padding:20px;">資料載入中...</div>
+        <div id="loading" style="text-align:center; padding:20px;">資料讀取中...</div>
         
         <table id="fire-table" style="display:none;">
             <thead>
                 <tr>
-                    <th>測站/國家森林遊樂區名稱</th>
+                    <th>測站/園區名稱</th>
                     <th>林火指數等級</th>
                     <th>更新日期</th>
                 </tr>
             </thead>
             <tbody id="table-body"></tbody>
         </table>
-        <div class="footer-note">資料來源：農業部林業及自然保育署 [cite: 19, 20]</div>
+        <div class="footer-note">資料來源：農業部林業及自然保育署</div>
     </div>
 </div>
 
 <script>
-    // 根據 API 文件介接資料 [cite: 3, 39]
+    /* 這裡的 API 資料抓取邏輯不變 */
     const apiURL = "https://data.moa.gov.tw/service/opendata/ForestFireAlert.aspx";
 
     function getDateKey(date) {
@@ -228,55 +227,41 @@
         try {
             const response = await fetch(apiURL);
             const data = await response.json();
-            
             const tableBody = document.getElementById('table-body');
-            const loading = document.getElementById('loading');
-            const table = document.getElementById('fire-table');
-            const dateDisplay = document.getElementById('date-display');
-
             const now = new Date();
             const todayKey = getDateKey(now);
             const yesterday = new Date();
             yesterday.setDate(now.getDate() - 1);
             const yesterdayKey = getDateKey(yesterday);
 
-            // 根據 CreateDate 欄位篩選最新資料 
             let targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(todayKey));
-            let infoText = "目前顯示：今日之即時預警資訊";
+            let infoText = "今日即時預警資訊";
 
             if (targetData.length === 0) {
                 targetData = data.filter(item => item.CreateDate && item.CreateDate.startsWith(yesterdayKey));
-                infoText = "提示：今日尚未更新，目前顯示昨日之預警資訊";
+                infoText = "今日尚未更新，顯示昨日之預警資訊";
             }
 
             if (targetData.length > 0) {
-                loading.style.display = 'none';
-                table.style.display = 'table';
-                dateDisplay.style.display = 'block';
-                dateDisplay.innerHTML = "⚠️ " + infoText;
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('fire-table').style.display = 'table';
+                const dateBox = document.getElementById('date-display');
+                dateBox.style.display = 'block';
+                dateBox.innerHTML = "⚠️ " + infoText;
 
                 targetData.forEach(item => {
                     const row = document.createElement('tr');
-                    // 使用 API 定義的欄位名稱：name, warn_level_chinese, CreateDate 
                     const warnText = item.warn_level_chinese || "安全";
                     let badgeClass = 'status-safe';
-                    if(warnText !== '安全') {
-                        badgeClass = warnText.includes('注意') ? 'status-warn' : 'status-danger';
-                    }
-                    const rawDate = item.CreateDate;
-                    const formattedDate = rawDate.substring(0,4) + "-" + rawDate.substring(4,6) + "-" + rawDate.substring(6,8);
-
+                    if(warnText !== '安全') badgeClass = warnText.includes('注意') ? 'status-warn' : 'status-danger';
+                    const d = item.CreateDate;
+                    const formattedDate = d.substring(0,4) + "-" + d.substring(4,6) + "-" + d.substring(6,8);
                     row.innerHTML = `<td>${item.name}</td><td><span class="status-badge ${badgeClass}">${warnText}</span></td><td>${formattedDate}</td>`;
                     tableBody.appendChild(row);
                 });
-            } else {
-                loading.innerHTML = "目前尚無資料更新。";
             }
-        } catch (error) {
-            document.getElementById('loading').innerHTML = "載入失敗。";
-        }
+        } catch (e) { console.error(e); }
     }
-
     fetchFireData();
 </script>
 
